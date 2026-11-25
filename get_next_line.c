@@ -6,7 +6,7 @@
 /*   By: ottouije <ottouije@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/20 14:14:02 by ottouije          #+#    #+#             */
-/*   Updated: 2026/11/21 18:12:17 by ottouije         ###   ########.fr       */
+/*   Updated: 2026/11/24 15:31:21 by ottouije         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ char	*clean_stash(char *stash)
 		i++;
 	if (!stash[i] || !stash[i + 1])
 		return (NULL);
-	dest = malloc((ft_strlen(stash + ++i) + 1) * sizeof(char));
+	i++;
+	dest = malloc((ft_strlen(stash + i) + 1) * sizeof(char));
 	if (!dest)
 		return (NULL);
 	while (stash[i])
@@ -76,13 +77,13 @@ char	*extract_line(char *stash)
 	return (str);
 }
 
-char	*read_and_stash(int fd, char *stash, size_t buffer_size)
+char	*read_and_stash(int fd, char *stash)
 {
 	char	*arr;
 	char	*temp;
 	ssize_t	num;
 
-	arr = malloc(buffer_size + 1);
+	arr = malloc(BUFFER_SIZE + 1);
 	if (!arr)
 	{
 		free(stash);
@@ -91,12 +92,13 @@ char	*read_and_stash(int fd, char *stash, size_t buffer_size)
 	num = 1;
 	while (!ft_strchr(stash, '\n') && num > 0)
 	{
-		num = read(fd, arr, buffer_size);
+		num = read(fd, arr, BUFFER_SIZE);
 		if (num > 0)
 		{
 			arr[num] = '\0';
 			temp = stash;
 			stash = ft_strjoin(temp, arr);
+			free(temp);
 			if (!stash)
 				num = -1;
 		}
@@ -109,12 +111,10 @@ char	*get_next_line(int fd)
 	static char	*stash;
 	char		*str;
 	char		*new_stash;
-	size_t		buffer_size;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buffer_size = (size_t)BUFFER_SIZE;
-	stash = read_and_stash(fd, stash, buffer_size);
+	stash = read_and_stash(fd, stash);
 	if (!stash)
 		return (NULL);
 	str = extract_line(stash);
@@ -129,20 +129,19 @@ char	*get_next_line(int fd)
 	stash = new_stash;
 	return (str);
 }
-
-int	main(void)
-{
-	char *str;
-	int fd = open("text.txt", O_RDONLY);
-	if (fd < 0)
-		return (1);
-	str = get_next_line(fd);
-	while (str)
-	{
-		printf("%s", str);
-		free(str);
-		str = get_next_line(fd);
-	}
-	close(fd);
-	return (0);
-}
+// int	main(void)
+// {
+// 	char *str;
+// 	int fd = open("text.txt", O_RDONLY);
+// 	if (fd < 0)
+// 		return (1);
+// 	str = get_next_line(fd);
+// 	while (str)
+// 	{
+// 		printf("%s", str);
+// 		free(str);
+// 		str = get_next_line(fd);
+// 	}
+// 	close(fd);
+// 	return (0);
+// }

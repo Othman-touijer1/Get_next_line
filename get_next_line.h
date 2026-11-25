@@ -6,7 +6,7 @@
 /*   By: ottouije <ottouije@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/20 20:43:54 by ottouije          #+#    #+#             */
-/*   Updated: 2026/11/20 20:43:55 by ottouije         ###   ########.fr       */
+/*   Updated: 2026/11/25 16:36:02 by ottouije         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,6 @@ char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strdup(const char *s);
 char	*ft_strchr(const char *s, int c);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
-int		ft_strlen(char *str);
+size_t	ft_strlen(const char *str);
 
 #endif
